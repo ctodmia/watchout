@@ -19,10 +19,6 @@ var svg = d3.select("body").append("svg")
     .append("g")
     // .attr("transform", "translate(32," + (height / 2) + ")");
 
-var imgs = svg.selectAll("img").data([0]);
-            imgs.enter()
-            .append("svg:img")
-            .attr("xlink:href", "asteroid.png")
 
 function update(data) {
 
@@ -33,7 +29,7 @@ function update(data) {
 
   // UPDATE
   // Update old elements as needed.
-  text.attr("class", "update");
+  // text.attr("class", "update");
 
   // ENTER
   // Create new elements as needed.
@@ -67,8 +63,11 @@ update(enemies);
 
 // Grab a random sample of letters from the alphabet, in alphabetical order.
 setInterval(function() {
-  update(d3.shuffle(enemies)
-      .slice(0, Math.floor(Math.random() * 26))
-      .sort());
-}, 1500);
+  update(d3.selectAll(".enter")
+    .transition().duration(2000)
+    .attr("x", function(d, i) { return Math.floor(Math.random()*960); })
+    .attr("y", function(d, i) { return Math.floor(Math.random()*500);}))
+      // .slice(0, Math.floor(Math.random()))
+      // .sort());
+}, 2000);
 
