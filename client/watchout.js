@@ -9,6 +9,7 @@
 
 var enemies = _.range(0, 30)/* array of 30 enemies with random x and y coordinates*/;
 
+
 var width = 960,
     height = 500,
     nEnemies = 30 
@@ -18,14 +19,34 @@ var svg = d3.select("body").append("svg")
     .attr("height", height)
     .append("g")
     // .attr("transform", "translate(32," + (height / 2) + ")");
+// var text = svg.selectAll("text")
+//     .data(data, function(d) { return d; });
+
+function initial(data) {
+  var text = svg.selectAll("text")
+    .data(data, function(d) { return d; });
+
+    text.attr("class", "initial");
+
+  text.enter().append("svg:image")
+      .attr("class", "enter")
+      // .append("svg:image")
+      .attr("xlink:href", "asteroid.png")
+      //.attr("dy", ".35em")
+      .attr("height", "50px")
+      .attr("width", "50px")
+      .text(function(d) { return d; });
+
+  text.attr("x", function(d, i) { return Math.floor(Math.random()*960); })
+    .attr("y", function(d, i) { return Math.floor(Math.random()*500);})
+}
 
 
 function update(data) {
-
+// var text = svg.selectAll("text")
+    // .data(data, function(d) { return d; });
   // DATA JOIN
   // Join new data with old elements, if any.
-  var text = svg.selectAll("text")
-      .data(data, function(d) { return d; });
 
   // UPDATE
   // Update old elements as needed.
@@ -35,14 +56,6 @@ function update(data) {
   // Create new elements as needed.
   //svg.selectAll("text")
   //    .data(data, function(d) { return d; });
-  text.enter().append("svg:image")
-      .attr("class", "enter")
-      // .append("svg:image")
-      .attr("xlink:href", "asteroid.png")
-      //.attr("dy", ".35em")
-      .attr("height", "100px")
-      .attr("width", "100px")
-      .text(function(d) { return d; });
   // text.enter().selectAll("image").data([0])
 
 
@@ -50,16 +63,15 @@ function update(data) {
   // Appending to the enter selection expands the update selection to include
   // entering elements; so, operations on the update selection after appending to
   // the enter selection will apply to both entering and updating nodes.
-  text.attr("x", function(d, i) { return Math.floor(Math.random()*960); })
-    .attr("y", function(d, i) { return Math.floor(Math.random()*500);})
 
   // EXIT
   // Remove old elements as needed.
-  text.exit().remove();
+  // text.exit().remove();
 }
 
 // The initial display.
-update(enemies);
+initial(enemies);
+// update(enemies);
 
 // Grab a random sample of letters from the alphabet, in alphabetical order.
 setInterval(function() {
@@ -69,5 +81,5 @@ setInterval(function() {
     .attr("y", function(d, i) { return Math.floor(Math.random()*500);}))
       // .slice(0, Math.floor(Math.random()))
       // .sort());
-}, 2000);
+}, 1500);
 
