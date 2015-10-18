@@ -28,6 +28,7 @@ var collide = function() {
     if (collisionDetected === false) {
       if((Math.abs(shipX - astrX) < 40) &&  (Math.abs(shipY - astrY) < 40) ){
         collisionDetected = true;
+        collisionCount = collisionCount +1;
         console.log("this", this,"ship", shipX);
       }
     };
@@ -41,6 +42,13 @@ var collide = function() {
 
 };
 
+function updateScore () {
+  if (collisionCount<10) {
+    currentScore = currentScore +1; 
+   d3.select('.current span').text(currentScore);
+  }
+}
+d3.timer(updateScore);
 
 function initialPlayer (data){
   var text = svg.selectAll("text")
