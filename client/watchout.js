@@ -3,7 +3,9 @@ var player = [1];
 
 var width = 960,
     height = 500,
-    nEnemies = 30 
+    nEnemies = 30, 
+    collisionCount = 0,
+    currentScore = 0
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -14,13 +16,29 @@ var drag = d3.behavior.drag()
   .on('drag', function() { svg.selectAll('.ship').attr('x', d3.event.x)
                                                  .attr('y', d3.event.y)});
                                                  // .call(collide); 
-
+var prevCollision = false;
 var collide = function() {
-  for(var i=0; i<enemies.length; i++){
-    if(svg.selectAll('.ship').attr('x') - svg.selectAll('.enter').data('d').attr('x') < 1 && svg.selectAll('.ship').attr('y') - svg.selectAll('.enter').data('d').attr('y') < 1 ){
-      console.log("asteroid", svg.selectAll('.enter').data('d').attr('x'));
+ var collisionDetected = false;
+  svg.selectAll('.enter').each(function(d){
+    var enemy = d3.select(this);
+    var shipX = svg.selectAll('.ship').attr('x'); 
+    var astrX = enemy.attr('x');
+    var shipY = svg.selectAll('.ship').attr('y');
+    var astrY = enemy.attr('y');
+    if (collisionDetected === false) {
+      if((Math.abs(shipX - astrX) < 40) &&  (Math.abs(shipY - astrY) < 40) ){
+        collisionDetected = true;
+        console.log("this", this,"ship", shipX);
+      }
     };
-  }
+    if(collisionDetected && prevCollision === false) {
+      // add to collision count
+      collisionCount = collisionCount +1;
+      d3.select('.collisions span').text(collisionCount);
+      prevCollision = true;
+    }
+  })
+
 };
 
 
@@ -73,7 +91,4 @@ setInterval(function() {
     .attr("x", function(d, i) { return Math.floor(Math.random()*960); })
     .attr("y", function(d, i) { return Math.floor(Math.random()*500);})
 }, 1500);
-setInterval(function(){
- svg.selectAll('.ship')
-  .call(collide); 
-}, 3000);
+d3.timer(collide);
